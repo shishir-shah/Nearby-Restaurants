@@ -31,6 +31,7 @@ import rx.schedulers.Schedulers;
  * Created by Shishir on 2/4/2017.
  */
 public class Items extends AppCompatActivity{
+
     @BindView(R.id.selected_items_tool_bar) Toolbar toolbar;
     @BindView(R.id.selected_items_list) RecyclerView recycleList;
 
@@ -65,7 +66,9 @@ public class Items extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         int id = item.getItemId();
+
         if (id == R.id.clear) {
             adapter.clearItems();
         }

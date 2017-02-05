@@ -22,8 +22,11 @@
         </activity>
 
         <activity android:name=".Items"
-            android:label="Selected Restarurant"
+            android:label="Selected Restaurant"
             android:parentActivityName=".MainActivity"/>
+
+        <uses-library android:name="com.google.android.maps" />
+
     </application>
 
 </manifest>

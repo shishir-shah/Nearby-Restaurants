@@ -19,12 +19,15 @@
         android:layout_weight="2"
         android:layout_marginTop="@dimen/text_margin_top_from_parent"/>
 
-    <ListView
+    <!--
+    <com.google.android.maps.MapView
+        android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_margin_top_from_parent"
         android:layout_weight="1"
-        android:id="@+id/list_view">
+        android:apiKey="AIzaSyBt08WxEypilTzyi2fQBm9OBIgzSt3uk2g"
+        android:clickable="true" /> -->
 
-    </ListView>
 
 </LinearLayout>

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.SphericalUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -86,11 +88,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
+
         @BindView(R.id.name) TextView name;
         @BindView(R.id.rating) TextView rating;
         @BindView(R.id.image) ImageView image;
         @BindView(R.id.address) TextView address;
         @BindView(R.id.distance) TextView distance;
+
         public MyViewHolder(View v) {
             super(v);
 
@@ -100,6 +104,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
             rating.setTypeface(Fonts.getRobotoLight(v));
             address.setTypeface(Fonts.getRobotoLight(v));
             distance.setTypeface(Fonts.getRobotoLight(v));
+
         }
 
         public void bind(final RestaurantModel item, final OnItemClickListener listener) {
@@ -158,12 +163,26 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         restaurantLoc.setLongitude(item.getLongitude());
         */
 
+        String distance = "N/A";
+
+        LatLng current = null;
+        LatLng destination = null;
+
+        if (currentLocation != null) {
+            current = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        }
+
+        if (item.getLatitude() != null && item.getLongitude() != null) {
+            destination = new LatLng(item.getLatitude(), item.getLongitude());
+        }
+
+        if (destination != null && current != null) {
+            double dist = SphericalUtil.computeDistanceBetween(current, destination);
+            distance = String.valueOf(Math.round(dist * 100) / 100);
+        }
 
         //String distance = String.valueOf(getDistance(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLatitude(), item.getLongitude()));
-        String distance = ".1";
-        if(distance != null){
-            holder.distance.setText(distance+" mi");
-        }
+        holder.distance.setText(distance + " mt");
     }
 
 

@@ -3,9 +3,7 @@ package project.sideproject.com.zumperinterview;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import java.util.List;
+
+import com.google.android.gms.maps.MapView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +29,8 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+
+
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.recycleList) RecyclerView recycleList;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Location currentLocation;
     private MainAdapter adapter;
+
 
 
     @Override
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void makeAPICall(Location currentLocation) {
 
-        String location ="";
+        String location = "";
 
         if(currentLocation != null){
             location = String.valueOf(currentLocation.getLatitude())+","+String.valueOf(currentLocation.getLongitude());
@@ -120,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Places> call, Response<Places> response) {
 
-                Log.i("onResponse",response.code()+"");
                 Observable<RestaurantModel> observable = AsyncLoad.getObservable(response.body(),key);
                 observable.onBackpressureBuffer()
                         .subscribeOn(Schedulers.newThread())
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
     private void addKeys() {
         SharedPreferences pref = getSharedPreferences(Keys.API_KEYS,MODE_PRIVATE);
         pref.edit().putString(Keys.GOOGLE_PLACES_KEY, "AIzaSyB-bpw0ollWA5AKpT11Y2CL2qPFs4kC_dk")
-                .putString(Keys.GOOGLE_MAPS_KEY, "AIzaSyBt08WxEypilTzyi2fQBm9OBIgzSt3uk2g").commit();
+                .putString(Keys.GOOGLE_MAPS_KEY, "AIzaSyBt08WxEypilTzyi2fQBm9OBIgzSt3uk2g").apply();
 
     }
 

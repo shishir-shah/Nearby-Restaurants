@@ -71,12 +71,14 @@ public class ItemAdapter extends  RecyclerView.Adapter<ItemAdapter.MyViewHolder>
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
+
         @BindView(R.id.title) TextView name;
         @BindView(R.id.place_rating) TextView rating;
         @BindView(R.id.item_image) ImageView image;
         @BindView(R.id.place_address) TextView address;
         @BindView(R.id.phone_number) TextView phoneNumber;
         @BindView(R.id.price_level) TextView priceLevel;
+
         public MyViewHolder(View v) {
             super(v);
 
