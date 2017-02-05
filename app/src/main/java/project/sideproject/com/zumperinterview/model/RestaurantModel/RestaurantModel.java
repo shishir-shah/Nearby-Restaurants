@@ -5,10 +5,12 @@ package project.sideproject.com.zumperinterview.model.RestaurantModel;
  */
 public class RestaurantModel {
     private String name;
-    private String address;
-    private String phoneNumber;
-    private String image;
-    private String ratings;
+    private double rating;
+    private String placeId;
+    private double latitude;
+    private double longitude;
+    private int priceLevel;
+    private String icon;
 
     public String getName() {
         return name;
@@ -18,35 +20,52 @@ public class RestaurantModel {
         this.name = name;
     }
 
-    public String getAddress() {
-        return address;
+
+    public String getPlaceId() {
+        return placeId;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPlaceId(String id) {
+        this.placeId = id;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public String getImage() {
-        return image;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
-    public String getRatings() {
-        return ratings;
+    public int getPriceLevel() {
+        return priceLevel;
     }
 
-    public void setRatings(String ratings) {
-        this.ratings = ratings;
+    public void setPriceLevel(int priceLevel) {
+        this.priceLevel = priceLevel;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

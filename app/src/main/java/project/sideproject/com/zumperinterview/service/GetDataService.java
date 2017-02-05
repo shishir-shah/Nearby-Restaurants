@@ -11,8 +11,10 @@ import retrofit2.http.Query;
 public interface GetDataService {
     String endpoint = "https://maps.googleapis.com/maps/api/place/nearbysearch/";
 
-    @GET("?json/&type=restaurant&rankby=distance")
+    @GET("json?type=restaurant&rankby=distance")
     Call<Places> getNearbyRestaurants(@Query("location") String location, @Query("key") String key);
 
     //https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=33.790802,-118.135482&type=restaurant&radius=500&key=AIzaSyB-bpw0ollWA5AKpT11Y2CL2qPFs4kC_dk
+
+    //https://maps.googleapis.com/maps/api/place/nearbysearch/?json/type=restaurant&rankby=distance&location=33.790802,-118.135482&key=AIzaSyB-bpw0ollWA5AKpT11Y2CL2qPFs4kC_dk
 }

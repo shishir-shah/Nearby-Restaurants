@@ -2,7 +2,6 @@ package project.sideproject.com.zumperinterview.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import project.sideproject.com.zumperinterview.Fonts;
 import project.sideproject.com.zumperinterview.R;
+import project.sideproject.com.zumperinterview.model.Data;
 import project.sideproject.com.zumperinterview.model.RestaurantModel.RestaurantModel;
 
 /**
@@ -32,8 +32,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
     private List<RestaurantModel> dataList;
 
     public MainAdapter(){
-        dataList = new ArrayList<>();
+        this.dataList = new ArrayList<>();
     }
+
+    /*
+    public MainAdapter(List<Data> data){
+        this.dataList = data;
+    }
+    */
 
     public void addItem(RestaurantModel item){
         dataList.add(item);
@@ -44,6 +50,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         dataList.clear();
         notifyDataSetChanged();
     }
+
 
     @Override
     public MainAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -89,13 +96,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
     }
 
     private void loadRatings(MyViewHolder holder, RestaurantModel item) {
-        holder.name.setText(item.getRatings());
+        holder.rating.setText("Rating : "+String.valueOf(item.getRating())+"/5");
     }
 
     private void loadImage(MyViewHolder holder, RestaurantModel item) {
 
         Picasso.with(context)
-                .load(item.getImage())
+                .load(item.getIcon())
                 .placeholder(R.drawable.not_available)
                 .error(R.drawable.not_available)
                 .into(holder.image);

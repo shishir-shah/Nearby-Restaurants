@@ -1,6 +1,6 @@
 package project.sideproject.com.zumperinterview;
 
-import android.app.Activity;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,22 +8,31 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import project.sideproject.com.zumperinterview.adapter.MainAdapter;
+import project.sideproject.com.zumperinterview.model.Data;
+import project.sideproject.com.zumperinterview.model.RestaurantModel.RestaurantModel;
 import project.sideproject.com.zumperinterview.model.search.Places;
 import project.sideproject.com.zumperinterview.service.GetDataService;
 import project.sideproject.com.zumperinterview.service.ServiceFactory;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.recycleList) RecyclerView recycleList;
     @BindView(R.id.tool_bar) Toolbar toolbar;
+
+    List<Data> tempList;
 
     private MainAdapter adapter;
 
@@ -53,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        createData();
+
         /*Create a recycler view for loading of nearby restaurants*/
         createRecyclerView();
 
@@ -66,6 +77,18 @@ public class MainActivity extends AppCompatActivity {
         makeAPICall();
     }
 
+    private void createData() {
+        tempList = new ArrayList<>();
+
+        String panda = "https://upload.wikimedia.org/wikipedia/en/thumb/8/85/Panda_Express_logo.svg/1024px-Panda_Express_logo.svg.png";
+        String chipottle = "https://static1.squarespace.com/static/536703e7e4b03af4b79eaaaf/t/53a24f5ae4b01c7e0c0511d5/1403146075814/logo-chipotle.png";
+        String pizzahut = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d2/Pizza_Hut_logo.svg/1088px-Pizza_Hut_logo.svg.png";
+
+        tempList.add(new Data("Panda Express","4",panda));
+        tempList.add(new Data("Chipottle","2",chipottle));
+        tempList.add(new Data("PizzaHut","5",pizzahut));
+    }
+
 
     // Helper Methods
 
@@ -77,12 +100,15 @@ public class MainActivity extends AppCompatActivity {
                 .createRetrofitService(GetDataService.class,GetDataService.endpoint)
                 .getNearbyRestaurants("33.790802,-118.135482",key);
 
-        call.enqueue(new Callback<Places>() {
+       call.enqueue(new Callback<Places>() {
             @Override
             public void onResponse(Call<Places> call, Response<Places> response) {
-                int statusCode = response.code();
 
-                Log.i("onResponse",statusCode+"");
+                Observable<RestaurantModel> observable = AsyncLoad.getObservable(response.body());
+                observable.onBackpressureBuffer()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new DataSubscriber());
             }
 
             @Override
@@ -155,4 +181,21 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+   private class DataSubscriber extends Subscriber<RestaurantModel>{
+
+        @Override
+        public void onCompleted() {
+            Log.i("onComeleted","true");
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.e("onError",e.getMessage());
+        }
+
+        @Override
+        public void onNext(RestaurantModel item) {
+            adapter.addItem(item);
+        }
+    }
 }
