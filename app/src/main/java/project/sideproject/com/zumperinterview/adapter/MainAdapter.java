@@ -27,7 +27,6 @@ import project.sideproject.com.zumperinterview.model.RestaurantModel.RestaurantM
  * Created by Shishir on 2/4/2017.
  */
 
-
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> {
 
     private Context context;
@@ -41,25 +40,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         this.dataList = new ArrayList<>();
         this.listener = listener;
     }
-
-    public void addItem(RestaurantModel item){
-        dataList.add(item);
-        notifyDataSetChanged();
-    }
-
-    public void deleteItems(){
-        dataList.clear();
-        notifyDataSetChanged();
-    }
-
-    public void setCurrentLocation(Location loc){
-        this.currentLocation = loc;
-    }
-
-    public Location getCurrentLocation(){
-        return this.currentLocation;
-    }
-
 
     @Override
     public MainAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -120,6 +100,15 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
 
     // Helper methods
 
+    public void addItem(RestaurantModel item){
+        dataList.add(item);
+        notifyDataSetChanged();
+    }
+
+    public void setCurrentLocation(Location loc){
+        this.currentLocation = loc;
+    }
+
     private void loadName(MyViewHolder holder, RestaurantModel item) {
         String name = item.getName();
         if(name != null){
@@ -156,13 +145,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
 
     private void loadDistance(MyViewHolder holder, RestaurantModel item) {
 
-        // Get the location of restaurant obtained from response
-        /*
-        Location restaurantLoc = new Location("");
-        restaurantLoc.setLatitude(item.getLatitude());
-        restaurantLoc.setLongitude(item.getLongitude());
-        */
-
         String distance = "N/A";
 
         LatLng current = null;
@@ -181,32 +163,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
             distance = String.valueOf(Math.round(dist * 100) / 100);
         }
 
-        //String distance = String.valueOf(getDistance(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLatitude(), item.getLongitude()));
         holder.distance.setText(distance + " mt");
     }
 
-
-
-    /*
-    public String getDistance(double lat1, double lon1, double lat2, double lon2){
-
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-
-        // Rounding distance to two decimal places
-        dist = Math.floor(dist*100)/100;
-        return (Double.toString(dist) + " mi");
-    }
-
-    private static double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
-
-    private static double rad2deg(double rad) {
-        return (rad * 180 / Math.PI);
-    }
-    */
 }

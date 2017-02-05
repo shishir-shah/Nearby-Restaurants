@@ -11,9 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-
-import com.google.android.gms.maps.MapView;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import project.sideproject.com.zumperinterview.adapter.MainAdapter;
@@ -29,8 +26,6 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-
-
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.recycleList) RecyclerView recycleList;
@@ -38,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Location currentLocation;
     private MainAdapter adapter;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +61,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-
         /*Get the current location*/
         currentLocation = getCurrentLocation();
-
-        // Remove this code
-        /*currentLocation = new Location("");
-        currentLocation.setLatitude(33.790802);
-        currentLocation.setLongitude(-118.135482);*/
 
         /*Create a recycler view for loading of nearby restaurants*/
         createRecyclerView();
@@ -93,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     // Helper Methods
 
     private Location getCurrentLocation() {
+
         GetLocation locationService = new GetLocation(MainActivity.this);
 
         if(locationService.canGetLocation()){
@@ -149,12 +137,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createAndSetCustomAdapter(){
+
         adapter = new MainAdapter(new Listener());
         adapter.setCurrentLocation(currentLocation);
         recycleList.setAdapter(adapter);
     }
 
     private void addKeys() {
+
         SharedPreferences pref = getSharedPreferences(Keys.API_KEYS,MODE_PRIVATE);
         pref.edit().putString(Keys.GOOGLE_PLACES_KEY, "AIzaSyB-bpw0ollWA5AKpT11Y2CL2qPFs4kC_dk")
                 .putString(Keys.GOOGLE_MAPS_KEY, "AIzaSyBt08WxEypilTzyi2fQBm9OBIgzSt3uk2g").apply();
@@ -204,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onCompleted() {
-            Log.i("onComeleted","true");
+            Log.i("onCompleted","true");
         }
 
         @Override

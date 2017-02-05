@@ -66,6 +66,7 @@ public class AsyncLoad {
         if(model == null){
             return getNullObservable();
         }
+
         else {
             return Observable.create(new Observable.OnSubscribe<RestaurantModel>() {
                 @Override
@@ -74,6 +75,7 @@ public class AsyncLoad {
                     project.sideproject.com.zumperinterview.model.item_search.Result result = model.getResult();
 
                     RestaurantModel item = new RestaurantModel();
+
                     if(result.getName() != null){
                         item.setName(result.getName());
                     }
@@ -137,7 +139,6 @@ public class AsyncLoad {
     }
 
     // Method to return an observable for a null or a failed result
-
     public static Observable<RestaurantModel> getNullObservable(){
 
         return Observable.create(new Observable.OnSubscribe<RestaurantModel>(){

@@ -42,6 +42,7 @@ public class Items extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selected_item_layout);
+
         ButterKnife.bind(this);
 
         setupToolBar();
@@ -110,13 +111,16 @@ public class Items extends AppCompatActivity{
     }
 
     private void createRecyclerView(){
+
         recycleList.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recycleList.setLayoutManager(layoutManager);
+
     }
 
     private void createAndSetCustomAdapter(){
+
         adapter = new ItemAdapter(new Listener());
         recycleList.setAdapter(adapter);
     }
@@ -147,7 +151,6 @@ public class Items extends AppCompatActivity{
             if(currentLocation != null && item.getLongitude()!= null  && item.getLatitude() != null){
 
                 Uri uri = Uri.parse("http://maps.google.com/maps?saddr=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() + "&daddr=" + item.getLatitude() + "," + item.getLongitude() + "\"");
-
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 
                 if (intent.resolveActivity(getPackageManager()) != null) {

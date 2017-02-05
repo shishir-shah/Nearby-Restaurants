@@ -2,7 +2,6 @@ package project.sideproject.com.zumperinterview.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +60,8 @@ public class ItemAdapter extends  RecyclerView.Adapter<ItemAdapter.MyViewHolder>
         loadRatings(holder, item);
         loadImage(holder, item);
         loadAddress(holder, item);
-        loadPhoneNumber(holder,item);
+        loadPhoneNumber(holder, item);
+        loadPriceLevel(holder,item);
 
     }
 
@@ -90,6 +90,7 @@ public class ItemAdapter extends  RecyclerView.Adapter<ItemAdapter.MyViewHolder>
             phoneNumber.setTypeface(Fonts.getRobotoRegular(v));
             priceLevel.setTypeface(Fonts.getRobotoRegular(v));
         }
+
         public void bind(final RestaurantModel item, final OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
 
@@ -139,6 +140,16 @@ public class ItemAdapter extends  RecyclerView.Adapter<ItemAdapter.MyViewHolder>
         String phoneNumber = item.getPhoneNumber();
         if(phoneNumber != null){
             holder.phoneNumber.setText("Phone : "+phoneNumber);
+        }
+    }
+
+    private void loadPriceLevel(MyViewHolder holder, RestaurantModel item) {
+        Integer priceLevel = item.getPriceLevel();
+        if(priceLevel != null){
+            holder.priceLevel.setText("Price Level : "+priceLevel+"/5");
+        }
+        else{
+            holder.priceLevel.setText("Price Level : N/A");
         }
     }
 
