@@ -9,8 +9,9 @@ public class RestaurantModel {
     private String placeId;
     private double latitude;
     private double longitude;
-    private int priceLevel;
+    private Integer priceLevel = null;
     private String icon;
+    private String vicinity;
 
     public String getName() {
         return name;
@@ -45,11 +46,11 @@ public class RestaurantModel {
         this.longitude = longitude;
     }
 
-    public int getPriceLevel() {
+    public Integer getPriceLevel() {
         return priceLevel;
     }
 
-    public void setPriceLevel(int priceLevel) {
+    public void setPriceLevel(Integer priceLevel) {
         this.priceLevel = priceLevel;
     }
 
@@ -67,5 +68,13 @@ public class RestaurantModel {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getVicinity() {
+        return vicinity;
+    }
+
+    public void setVicinity(String vicinity) {
+        this.vicinity = vicinity;
     }
 }

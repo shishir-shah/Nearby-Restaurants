@@ -30,7 +30,15 @@ public class AsyncLoad {
                         item.setPlaceId(result.getPlaceId());
                         item.setIcon(result.getIcon());
                         item.setRating(result.getRating());
-                        item.setPriceLevel(result.getPriceLevel());
+
+                        /*Inconsistency in the API
+                        * Some response have no price level*/
+                        if (result.getPriceLevel() != null) {
+                            item.setPriceLevel(result.getPriceLevel());
+                        }
+
+                        item.setVicinity(result.getVicinity());
+
                         item.setLatitude(result.getGeometry().getLocation().getLat());
                         item.setLongitude(result.getGeometry().getLocation().getLat());
                         subscriber.onNext(item);

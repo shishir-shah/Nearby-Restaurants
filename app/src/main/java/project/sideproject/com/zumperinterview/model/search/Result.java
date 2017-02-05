@@ -45,7 +45,7 @@ public class Result {
     private String vicinity;
     @SerializedName("price_level")
     @Expose
-    private Integer priceLevel;
+    private Integer priceLevel = null;
 
     public Geometry getGeometry() {
         return geometry;

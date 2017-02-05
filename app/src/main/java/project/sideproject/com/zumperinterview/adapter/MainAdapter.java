@@ -65,8 +65,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         RestaurantModel item = dataList.get(position);
 
         loadName(holder,item);
-        loadRatings(holder,item);
-        loadImage(holder,item);
+        loadRatings(holder, item);
+        loadImage(holder, item);
+        loadAddress(holder,item);
     }
 
     @Override
@@ -78,33 +79,49 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         @BindView(R.id.name) TextView name;
         @BindView(R.id.rating) TextView rating;
         @BindView(R.id.image) ImageView image;
+        @BindView(R.id.address) TextView address;
 
         public MyViewHolder(View v) {
             super(v);
 
             ButterKnife.bind(this, v);
 
-            name.setTypeface(Fonts.getRobotoLight(v));
+            name.setTypeface(Fonts.getRobotoBlack(v));
             rating.setTypeface(Fonts.getRobotoLight(v));
+            address.setTypeface(Fonts.getRobotoLight(v));
         }
     }
 
     // Helper methods
 
     private void loadName(MyViewHolder holder, RestaurantModel item) {
-        holder.name.setText(item.getName());
+        String name = item.getName();
+        if(name != null){
+            holder.name.setText(name);
+        }
+        else {
+            holder.name.setText("Name not found");
+        }
+
     }
 
     private void loadRatings(MyViewHolder holder, RestaurantModel item) {
+
         holder.rating.setText("Rating : "+String.valueOf(item.getRating())+"/5");
     }
 
     private void loadImage(MyViewHolder holder, RestaurantModel item) {
-
         Picasso.with(context)
                 .load(item.getIcon())
                 .placeholder(R.drawable.not_available)
                 .error(R.drawable.not_available)
                 .into(holder.image);
+    }
+
+    private void loadAddress(MyViewHolder holder, RestaurantModel item) {
+        String vicinity = item.getVicinity();
+        if(vicinity != null){
+            holder.address.setText(vicinity);
+        }
     }
 }
