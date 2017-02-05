@@ -2,6 +2,7 @@ package project.sideproject.com.zumperinterview;
 
 
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,13 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import project.sideproject.com.zumperinterview.adapter.MainAdapter;
-import project.sideproject.com.zumperinterview.model.Data;
 import project.sideproject.com.zumperinterview.model.RestaurantModel.RestaurantModel;
 import project.sideproject.com.zumperinterview.model.search.Places;
 import project.sideproject.com.zumperinterview.service.GetDataService;
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.recycleList) RecyclerView recycleList;
     @BindView(R.id.tool_bar) Toolbar toolbar;
 
-    List<Data> tempList;
+    private Location currentLocation;
 
     private MainAdapter adapter;
 
@@ -62,7 +61,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        createData();
+
+        // Remove this code
+        currentLocation = new Location("");
+        currentLocation.setLatitude(33.790802);
+        currentLocation.setLongitude(-118.135482);
 
         /*Create a recycler view for loading of nearby restaurants*/
         createRecyclerView();
@@ -76,19 +79,6 @@ public class MainActivity extends AppCompatActivity {
         * using RxJava asynchronously*/
         makeAPICall();
     }
-
-    private void createData() {
-        tempList = new ArrayList<>();
-
-        String panda = "https://upload.wikimedia.org/wikipedia/en/thumb/8/85/Panda_Express_logo.svg/1024px-Panda_Express_logo.svg.png";
-        String chipottle = "https://static1.squarespace.com/static/536703e7e4b03af4b79eaaaf/t/53a24f5ae4b01c7e0c0511d5/1403146075814/logo-chipotle.png";
-        String pizzahut = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d2/Pizza_Hut_logo.svg/1088px-Pizza_Hut_logo.svg.png";
-
-        tempList.add(new Data("Panda Express","4",panda));
-        tempList.add(new Data("Chipottle","2",chipottle));
-        tempList.add(new Data("PizzaHut","5",pizzahut));
-    }
-
 
     // Helper Methods
 
@@ -132,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void createAndSetCustomAdapter(){
         adapter = new MainAdapter();
+        adapter.setCurrentLocation(currentLocation);
         recycleList.setAdapter(adapter);
     }
 

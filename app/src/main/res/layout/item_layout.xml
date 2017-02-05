@@ -36,4 +36,13 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:id="@+id/distance"
+        android:paddingTop="@dimen/item_padding"
+        android:paddingRight="@dimen/item_padding"
+        android:textSize="@dimen/item_distance_size"/>
+
 </LinearLayout>

@@ -1,6 +1,7 @@
 package project.sideproject.com.zumperinterview.adapter;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import project.sideproject.com.zumperinterview.Fonts;
 import project.sideproject.com.zumperinterview.R;
-import project.sideproject.com.zumperinterview.model.Data;
 import project.sideproject.com.zumperinterview.model.RestaurantModel.RestaurantModel;
 
 /**
@@ -28,18 +28,12 @@ import project.sideproject.com.zumperinterview.model.RestaurantModel.RestaurantM
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> {
 
     private Context context;
-
+    private Location currentLocation;
     private List<RestaurantModel> dataList;
 
     public MainAdapter(){
         this.dataList = new ArrayList<>();
     }
-
-    /*
-    public MainAdapter(List<Data> data){
-        this.dataList = data;
-    }
-    */
 
     public void addItem(RestaurantModel item){
         dataList.add(item);
@@ -49,6 +43,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
     public void deleteItems(){
         dataList.clear();
         notifyDataSetChanged();
+    }
+
+    public void setCurrentLocation(Location loc){
+        this.currentLocation = loc;
+    }
+
+    public Location getCurrentLocation(){
+        return this.currentLocation;
     }
 
 
@@ -64,10 +66,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
 
         RestaurantModel item = dataList.get(position);
 
-        loadName(holder,item);
+        loadName(holder, item);
         loadRatings(holder, item);
         loadImage(holder, item);
-        loadAddress(holder,item);
+        loadAddress(holder, item);
+        loadDistance(holder,item);
     }
 
     @Override
@@ -80,7 +83,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
         @BindView(R.id.rating) TextView rating;
         @BindView(R.id.image) ImageView image;
         @BindView(R.id.address) TextView address;
-
+        @BindView(R.id.distance) TextView distance;
         public MyViewHolder(View v) {
             super(v);
 
@@ -89,6 +92,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
             name.setTypeface(Fonts.getRobotoBlack(v));
             rating.setTypeface(Fonts.getRobotoLight(v));
             address.setTypeface(Fonts.getRobotoLight(v));
+            distance.setTypeface(Fonts.getRobotoLight(v));
         }
     }
 
@@ -107,7 +111,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
 
     private void loadRatings(MyViewHolder holder, RestaurantModel item) {
 
-        holder.rating.setText("Rating : "+String.valueOf(item.getRating())+"/5");
+        holder.rating.setText("Rating : " + String.valueOf(item.getRating()) + "/5");
     }
 
     private void loadImage(MyViewHolder holder, RestaurantModel item) {
@@ -124,4 +128,43 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
             holder.address.setText(vicinity);
         }
     }
+
+    private void loadDistance(MyViewHolder holder, RestaurantModel item) {
+
+        // Get the location of restaurant obtained from response
+        Location restaurantLoc = new Location("");
+        restaurantLoc.setLatitude(item.getLatitude());
+        restaurantLoc.setLongitude(item.getLongitude());
+
+
+
+        //String distance = String.valueOf(getDistance(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLatitude(), item.getLongitude()));
+        String distance = ".1";
+        if(distance != null){
+            holder.distance.setText(distance+" mi");
+        }
+    }
+
+    /*
+    public String getDistance(double lat1, double lon1, double lat2, double lon2){
+
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+
+        // Rounding distance to two decimal places
+        dist = Math.floor(dist*100)/100;
+        return (Double.toString(dist) + " mi");
+    }
+
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
+    }
+    */
 }
