@@ -3,6 +3,7 @@ package project.sideproject.com.zumperinterview;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -57,14 +58,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
 
 
+        /*Get the current location*/
+        currentLocation = getCurrentLocation();
+
         // Remove this code
-        currentLocation = new Location("");
+        /*currentLocation = new Location("");
         currentLocation.setLatitude(33.790802);
-        currentLocation.setLongitude(-118.135482);
+        currentLocation.setLongitude(-118.135482);*/
 
         /*Create a recycler view for loading of nearby restaurants*/
         createRecyclerView();
@@ -76,23 +85,42 @@ public class MainActivity extends AppCompatActivity {
         /*Make an API call to Google Places API using Restrofit library
         * Once the result is obtained it is loaded into the list of items
         * using RxJava asynchronously*/
-        makeAPICall();
+        makeAPICall(currentLocation);
     }
 
     // Helper Methods
 
-    private void makeAPICall() {
+    private Location getCurrentLocation() {
+        GetLocation locationService = new GetLocation(MainActivity.this);
+
+        if(locationService.canGetLocation()){
+            return locationService.getLocation();
+        }
+        else {
+            locationService.showSettings();
+            return new Location("");
+        }
+    }
+
+    private void makeAPICall(Location currentLocation) {
+
+        String location ="";
+
+        if(currentLocation != null){
+            location = String.valueOf(currentLocation.getLatitude())+","+String.valueOf(currentLocation.getLongitude());
+        }
 
         final String key = getSharedPreferences(Keys.API_KEYS,MODE_PRIVATE).getString(Keys.GOOGLE_PLACES_KEY,"No key found");
 
         Call<Places> call = ServiceFactory
                 .createRetrofitService(GetDataService.class,GetDataService.endpoint)
-                .getNearbyRestaurants("33.790802,-118.135482",key);
+                .getNearbyRestaurants(location, key);
 
        call.enqueue(new Callback<Places>() {
             @Override
             public void onResponse(Call<Places> call, Response<Places> response) {
 
+                Log.i("onResponse",response.code()+"");
                 Observable<RestaurantModel> observable = AsyncLoad.getObservable(response.body(),key);
                 observable.onBackpressureBuffer()
                         .subscribeOn(Schedulers.newThread())
@@ -196,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
             Intent intent = new Intent(MainActivity.this,Items.class);
             intent.putExtra("placeId",item.getPlaceId());
+            intent.putExtra("Location",currentLocation);
 
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);

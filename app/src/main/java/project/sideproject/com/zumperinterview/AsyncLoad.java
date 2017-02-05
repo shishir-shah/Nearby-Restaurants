@@ -46,8 +46,8 @@ public class AsyncLoad {
                         Double lon = result.getGeometry().getLocation().getLng();
 
                         if (lat != null && lon != null) {
-                            item.setLatitude(result.getGeometry().getLocation().getLat());
-                            item.setLongitude(result.getGeometry().getLocation().getLat());
+                            item.setLatitude(lat);
+                            item.setLongitude(lon);
                         }
 
                         setImageForItem(item, result, key);
@@ -94,8 +94,8 @@ public class AsyncLoad {
                     Double lon = result.getGeometry().getLocation().getLng();
 
                     if (lat != null && lon != null) {
-                        item.setLatitude(result.getGeometry().getLocation().getLat());
-                        item.setLongitude(result.getGeometry().getLocation().getLat());
+                        item.setLatitude(lat);
+                        item.setLongitude(lon);
                     }
 
                     setImageForItem(item, result, key);
@@ -146,7 +146,7 @@ public class AsyncLoad {
             public void call(Subscriber<? super RestaurantModel> subscriber) {
 
                 RestaurantModel item = new RestaurantModel();
-                item.setName("No Item found, Please search again");
+                item.setName("Please search again");
 
                 subscriber.onNext(item);
                 subscriber.onCompleted();

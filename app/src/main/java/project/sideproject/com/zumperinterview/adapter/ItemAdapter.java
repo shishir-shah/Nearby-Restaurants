@@ -17,6 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import project.sideproject.com.zumperinterview.Fonts;
+import project.sideproject.com.zumperinterview.OnItemClickListener;
 import project.sideproject.com.zumperinterview.R;
 import project.sideproject.com.zumperinterview.model.RestaurantModel.RestaurantModel;
 
@@ -27,8 +28,10 @@ public class ItemAdapter extends  RecyclerView.Adapter<ItemAdapter.MyViewHolder>
 
     private List<RestaurantModel> dataList;
     private Context context;
+    private final OnItemClickListener listener;
+    public ItemAdapter(OnItemClickListener listener){
 
-    public ItemAdapter(){
+        this.listener = listener;
         dataList = new ArrayList<>();
     }
 
@@ -51,6 +54,8 @@ public class ItemAdapter extends  RecyclerView.Adapter<ItemAdapter.MyViewHolder>
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         RestaurantModel item = dataList.get(position);
+
+        holder.bind(item,listener);
 
         loadName(holder, item);
         loadRatings(holder, item);
@@ -82,6 +87,15 @@ public class ItemAdapter extends  RecyclerView.Adapter<ItemAdapter.MyViewHolder>
             address.setTypeface(Fonts.getRobotoRegular(v));
             phoneNumber.setTypeface(Fonts.getRobotoRegular(v));
             priceLevel.setTypeface(Fonts.getRobotoRegular(v));
+        }
+        public void bind(final RestaurantModel item, final OnItemClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClick(item);
+                }
+            });
         }
     }
 

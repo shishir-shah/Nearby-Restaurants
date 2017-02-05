@@ -152,10 +152,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
     private void loadDistance(MyViewHolder holder, RestaurantModel item) {
 
         // Get the location of restaurant obtained from response
+        /*
         Location restaurantLoc = new Location("");
         restaurantLoc.setLatitude(item.getLatitude());
         restaurantLoc.setLongitude(item.getLongitude());
-
+        */
 
 
         //String distance = String.valueOf(getDistance(currentLocation.getLatitude(), currentLocation.getLongitude(), item.getLatitude(), item.getLongitude()));

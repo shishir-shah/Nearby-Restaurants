@@ -1,6 +1,8 @@
 package project.sideproject.com.zumperinterview;
 
 import android.content.Intent;
+import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,6 +35,7 @@ public class Items extends AppCompatActivity{
     @BindView(R.id.selected_items_list) RecyclerView recycleList;
 
     private ItemAdapter adapter;
+    private Location currentLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,7 @@ public class Items extends AppCompatActivity{
 
         Intent intent = getIntent();
         String placeId = intent.getExtras().getString("placeId");
+        currentLocation = intent.getExtras().getParcelable("Location");
 
         createRecyclerView();
 
@@ -82,7 +86,7 @@ public class Items extends AppCompatActivity{
             @Override
             public void onResponse(Call<Restaurant> call, Response<Restaurant> response) {
 
-                Observable<RestaurantModel> observable = AsyncLoad.getSingleRestaurant(response.body(),key);
+                Observable<RestaurantModel> observable = AsyncLoad.getSingleRestaurant(response.body(), key);
                 observable.onBackpressureBuffer()
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -110,7 +114,7 @@ public class Items extends AppCompatActivity{
     }
 
     private void createAndSetCustomAdapter(){
-        adapter = new ItemAdapter();
+        adapter = new ItemAdapter(new Listener());
         recycleList.setAdapter(adapter);
     }
 
@@ -130,5 +134,24 @@ public class Items extends AppCompatActivity{
         public void onNext(RestaurantModel item) {
             adapter.addItem(item);
         }
+    }
+
+    private class Listener implements OnItemClickListener{
+
+        @Override
+        public void onItemClick(RestaurantModel item) {
+
+            if(currentLocation != null && item.getLongitude()!= null  && item.getLatitude() != null){
+
+                Uri uri = Uri.parse("http://maps.google.com/maps?saddr=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() + "&daddr=" + item.getLatitude() + "," + item.getLongitude() + "\"");
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+            }
+        }
+
     }
 }
