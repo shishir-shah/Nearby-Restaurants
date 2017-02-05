@@ -17,6 +17,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import project.sideproject.com.zumperinterview.Fonts;
+import project.sideproject.com.zumperinterview.OnItemClickListener;
 import project.sideproject.com.zumperinterview.R;
 import project.sideproject.com.zumperinterview.model.RestaurantModel.RestaurantModel;
 
@@ -31,8 +32,12 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
     private Location currentLocation;
     private List<RestaurantModel> dataList;
 
-    public MainAdapter(){
+    private final OnItemClickListener listener;
+
+    public MainAdapter(OnItemClickListener listener){
+
         this.dataList = new ArrayList<>();
+        this.listener = listener;
     }
 
     public void addItem(RestaurantModel item){
@@ -66,6 +71,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
 
         RestaurantModel item = dataList.get(position);
 
+        holder.bind(item,listener);
+
         loadName(holder, item);
         loadRatings(holder, item);
         loadImage(holder, item);
@@ -94,6 +101,16 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
             address.setTypeface(Fonts.getRobotoLight(v));
             distance.setTypeface(Fonts.getRobotoLight(v));
         }
+
+        public void bind(final RestaurantModel item, final OnItemClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    listener.onItemClick(item);
+                }
+            });
+        }
     }
 
     // Helper methods
@@ -111,7 +128,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
 
     private void loadRatings(MyViewHolder holder, RestaurantModel item) {
 
-        holder.rating.setText("Rating : " + String.valueOf(item.getRating()) + "/5");
+        if(item.getRating() != null){
+            holder.rating.setText("Rating : " + String.valueOf(item.getRating()) + "/5");
+        }
+
     }
 
     private void loadImage(MyViewHolder holder, RestaurantModel item) {
@@ -144,6 +164,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
             holder.distance.setText(distance+" mi");
         }
     }
+
+
 
     /*
     public String getDistance(double lat1, double lon1, double lat2, double lon2){

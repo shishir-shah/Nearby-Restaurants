@@ -6,12 +6,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import project.sideproject.com.zumperinterview.adapter.ItemAdapter;
-import project.sideproject.com.zumperinterview.adapter.MainAdapter;
+import project.sideproject.com.zumperinterview.model.RestaurantModel.RestaurantModel;
+import project.sideproject.com.zumperinterview.model.item_search.Restaurant;
+import project.sideproject.com.zumperinterview.service.GetDataService;
+import project.sideproject.com.zumperinterview.service.ServiceFactory;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Shishir on 2/4/2017.
@@ -25,14 +37,19 @@ public class Items extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.selected_item_layout);
+        ButterKnife.bind(this);
 
         setupToolBar();
+
+        Intent intent = getIntent();
+        String placeId = intent.getExtras().getString("placeId");
 
         createRecyclerView();
 
         createAndSetCustomAdapter();
 
-        makeAPICallForSelectedItem();
+        makeAPICallForSelectedItem(placeId);
     }
 
 
@@ -53,7 +70,30 @@ public class Items extends AppCompatActivity{
 
     // Helper methods
 
-    private void makeAPICallForSelectedItem() {
+    private void makeAPICallForSelectedItem(String placeId) {
+
+        final String key = getSharedPreferences(Keys.API_KEYS,MODE_PRIVATE).getString(Keys.GOOGLE_PLACES_KEY,"No key found");
+
+        Call<Restaurant> call = ServiceFactory
+                .createRetrofitService(GetDataService.class,GetDataService.itemDetailUrl)
+                .getRestaurantDetails(placeId,key);
+
+        call.enqueue(new Callback<Restaurant>() {
+            @Override
+            public void onResponse(Call<Restaurant> call, Response<Restaurant> response) {
+
+                Observable<RestaurantModel> observable = AsyncLoad.getSingleRestaurant(response.body(),key);
+                observable.onBackpressureBuffer()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new DataSubscriber());
+            }
+
+            @Override
+            public void onFailure(Call<Restaurant> call, Throwable t) {
+                Log.e("onFailure",t.getMessage());
+            }
+        });
 
     }
 
@@ -72,5 +112,23 @@ public class Items extends AppCompatActivity{
     private void createAndSetCustomAdapter(){
         adapter = new ItemAdapter();
         recycleList.setAdapter(adapter);
+    }
+
+    private class DataSubscriber extends Subscriber<RestaurantModel> {
+
+        @Override
+        public void onCompleted() {
+            Log.i("onCompeleted","true");
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.e("onError",e.getMessage());
+        }
+
+        @Override
+        public void onNext(RestaurantModel item) {
+            adapter.addItem(item);
+        }
     }
 }

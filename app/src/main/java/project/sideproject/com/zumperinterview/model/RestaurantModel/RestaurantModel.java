@@ -1,20 +1,23 @@
 package project.sideproject.com.zumperinterview.model.RestaurantModel;
 
+import android.location.Location;
+
 /**
  * Created by Shishir on 2/4/2017.
  */
 public class RestaurantModel {
     private String name;
-    private double rating;
+    private Double rating = null;
     private String placeId;
-    private double latitude;
-    private double longitude;
+    private Double latitude = null;
+    private Double longitude = null;
     private Integer priceLevel = null;
     private String icon;
     private String image;
     private String vicinity;
     private String formattedAddress;
     private String phoneNumber;
+    private Location location;
 
     public String getName() {
         return name;
@@ -33,19 +36,19 @@ public class RestaurantModel {
         this.placeId = id;
     }
 
-    public double getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 
@@ -57,11 +60,11 @@ public class RestaurantModel {
         this.priceLevel = priceLevel;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 
@@ -103,5 +106,13 @@ public class RestaurantModel {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }

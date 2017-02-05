@@ -1,8 +1,10 @@
 package project.sideproject.com.zumperinterview;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,16 +30,13 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
+
     @BindView(R.id.recycleList) RecyclerView recycleList;
     @BindView(R.id.tool_bar) Toolbar toolbar;
 
     private Location currentLocation;
-
     private MainAdapter adapter;
 
-    public static final String API_KEYS = "API_KEYS";
-    public static final String GOOGLE_PLACES_KEY = "GOOGLE_PLACES_KEY";
-    public static final String GOOGLE_MAPS_KEY="GOOGLE_MAPS_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void makeAPICall() {
 
-        String key = getSharedPreferences(API_KEYS,MODE_PRIVATE).getString(GOOGLE_PLACES_KEY,"No key found");
+        final String key = getSharedPreferences(Keys.API_KEYS,MODE_PRIVATE).getString(Keys.GOOGLE_PLACES_KEY,"No key found");
 
         Call<Places> call = ServiceFactory
                 .createRetrofitService(GetDataService.class,GetDataService.endpoint)
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Places> call, Response<Places> response) {
 
-                Observable<RestaurantModel> observable = AsyncLoad.getObservable(response.body());
+                Observable<RestaurantModel> observable = AsyncLoad.getObservable(response.body(),key);
                 observable.onBackpressureBuffer()
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -121,15 +120,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createAndSetCustomAdapter(){
-        adapter = new MainAdapter();
+        adapter = new MainAdapter(new Listener());
         adapter.setCurrentLocation(currentLocation);
         recycleList.setAdapter(adapter);
     }
 
     private void addKeys() {
-        SharedPreferences pref = getSharedPreferences(API_KEYS,MODE_PRIVATE);
-        pref.edit().putString(GOOGLE_PLACES_KEY, "AIzaSyB-bpw0ollWA5AKpT11Y2CL2qPFs4kC_dk")
-                .putString(GOOGLE_MAPS_KEY, "AIzaSyBt08WxEypilTzyi2fQBm9OBIgzSt3uk2g").commit();
+        SharedPreferences pref = getSharedPreferences(Keys.API_KEYS,MODE_PRIVATE);
+        pref.edit().putString(Keys.GOOGLE_PLACES_KEY, "AIzaSyB-bpw0ollWA5AKpT11Y2CL2qPFs4kC_dk")
+                .putString(Keys.GOOGLE_MAPS_KEY, "AIzaSyBt08WxEypilTzyi2fQBm9OBIgzSt3uk2g").commit();
 
     }
 
@@ -172,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-   private class DataSubscriber extends Subscriber<RestaurantModel>{
+    private class DataSubscriber extends Subscriber<RestaurantModel>{
 
         @Override
         public void onCompleted() {
@@ -188,5 +187,20 @@ public class MainActivity extends AppCompatActivity {
         public void onNext(RestaurantModel item) {
             adapter.addItem(item);
         }
+    }
+
+    private class Listener implements OnItemClickListener{
+
+        @Override
+        public void onItemClick(RestaurantModel item) {
+
+            Intent intent = new Intent(MainActivity.this,Items.class);
+            intent.putExtra("placeId",item.getPlaceId());
+
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            }
+        }
+
     }
 }

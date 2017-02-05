@@ -20,6 +20,7 @@
             android:theme="@style/BoldText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_marginTop="@dimen/text_margin_top_from_parent"
             android:id="@+id/title"
             android:text="Title"/>
@@ -43,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_margin_top"
-            android:id="@+id/rating"
+            android:id="@+id/place_rating"
             android:text="Rating"/>
 
         <TextView
@@ -52,7 +53,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/text_margin_top"
             android:id="@+id/phone_number"/>
-
 
         <TextView
             android:theme="@style/BoldText"

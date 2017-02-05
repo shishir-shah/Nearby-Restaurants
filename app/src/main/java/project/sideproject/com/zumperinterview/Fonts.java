@@ -27,4 +27,9 @@ public class Fonts {
         Typeface typeface = Typeface.createFromAsset(view.getResources().getAssets(),"fonts/RobotoCondensed-Light.ttf");
         return typeface;
     }
+
+    public static Typeface getRobotoRegular(View view){
+        Typeface typeface = Typeface.createFromAsset(view.getResources().getAssets(),"fonts/Roboto-Regular.ttf");
+        return typeface;
+    }
 }
