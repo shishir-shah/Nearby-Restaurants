@@ -6,17 +6,34 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import project.sideproject.com.zumperinterview.Fonts;
 import project.sideproject.com.zumperinterview.R;
+import project.sideproject.com.zumperinterview.model.RestaurantModel.RestaurantModel;
 
 /**
  * Created by Shishir on 2/4/2017.
  */
 public class ItemAdapter extends  RecyclerView.Adapter<ItemAdapter.MyViewHolder> {
+
+    List<RestaurantModel> dataList;
+
+    public ItemAdapter(){
+        dataList = new ArrayList<>();
+    }
+
+    public void addItem(RestaurantModel item){
+        dataList.add(item);
+        notifyDataSetChanged();
+    }
+    public void clearItems(){
+        dataList.clear();
+        notifyDataSetChanged();
+    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -24,8 +41,8 @@ public class ItemAdapter extends  RecyclerView.Adapter<ItemAdapter.MyViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position, List<Object> payloads) {
-        super.onBindViewHolder(holder, position, payloads);
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+
     }
 
     @Override

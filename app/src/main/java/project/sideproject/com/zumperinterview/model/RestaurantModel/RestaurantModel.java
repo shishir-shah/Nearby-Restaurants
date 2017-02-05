@@ -11,7 +11,10 @@ public class RestaurantModel {
     private double longitude;
     private Integer priceLevel = null;
     private String icon;
+    private String image;
     private String vicinity;
+    private String formattedAddress;
+    private String phoneNumber;
 
     public String getName() {
         return name;
@@ -76,5 +79,29 @@ public class RestaurantModel {
 
     public void setVicinity(String vicinity) {
         this.vicinity = vicinity;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getFormattedAddress() {
+        return formattedAddress;
+    }
+
+    public void setFormattedAddress(String formattedAddress) {
+        this.formattedAddress = formattedAddress;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

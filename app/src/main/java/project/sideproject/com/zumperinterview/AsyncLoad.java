@@ -11,7 +11,7 @@ import rx.Subscriber;
  */
 public class AsyncLoad {
 
-    public static Observable<RestaurantModel> getObservable(final Places model){
+    public static Observable<RestaurantModel> getObservable(final Places model, final String key){
 
         String status = model.getStatus();
         if(status == null) return getNullObservable();
@@ -38,9 +38,11 @@ public class AsyncLoad {
                         }
 
                         item.setVicinity(result.getVicinity());
-
                         item.setLatitude(result.getGeometry().getLocation().getLat());
                         item.setLongitude(result.getGeometry().getLocation().getLat());
+
+                        setImageForItem(item,result,key);
+
                         subscriber.onNext(item);
                     }
                     subscriber.onCompleted();
@@ -48,6 +50,15 @@ public class AsyncLoad {
             });
         }else return getNullObservable();
 
+    }
+
+    private static void setImageForItem(RestaurantModel item, Result result, String currentKey) {
+
+        String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&sensor=false";
+        String key = "&key="+currentKey;
+        String photoReference = "&photoreference="+result.getPhotos().get(0).getPhotoReference();
+
+        item.setImage(url+key+photoReference);
     }
 
     // Method to return an observable for a null or a failed result

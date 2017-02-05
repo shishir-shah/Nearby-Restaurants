@@ -27,58 +27,43 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_height"
-            android:layout_marginTop="@dimen/text_margin_top_from_parent"
+            android:layout_marginTop="@dimen/text_margin_top"
             android:id="@+id/item_image" />
 
-        <LinearLayout
+
+        <TextView
+            android:theme="@style/BoldText"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/item_text">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin_top_from_parent"
+            android:id="@+id/place_address"/>
+
+        <TextView
+            android:theme="@style/BoldText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin_top"
+            android:id="@+id/rating"
+            android:text="Rating"/>
+
+        <TextView
+            android:theme="@style/BoldText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin_top"
+            android:id="@+id/phone_number"/>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+        <TextView
+            android:theme="@style/BoldText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin_top"
+            android:id="@+id/price_level"/>
 
-                <TextView
-                    android:theme="@style/BoldText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/text_margin_top"
-                    android:id="@+id/price"
-                    android:text="Price"/>
-
-                <TextView
-                    android:theme="@style/BoldText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/text_margin_top"
-                    android:layout_marginLeft="@dimen/text_margin_left"
-                    android:id="@+id/previous_price"/>
-
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/text_margin_top"
-                    android:layout_marginLeft="@dimen/text_margin_left"
-                    android:id="@+id/down_or_up"/>
-
-                <TextView
-                    android:theme="@style/BoldText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/text_margin_top"
-                    android:layout_marginLeft="@dimen/text_margin_left_from_sibling"
-                    android:id="@+id/percent_change"/>
-
-
-            </LinearLayout>
-
-        </LinearLayout>
 
     </LinearLayout>
+
+
 
 </android.support.v7.widget.CardView>

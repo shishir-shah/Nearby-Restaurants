@@ -116,7 +116,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MyViewHolder> 
 
     private void loadImage(MyViewHolder holder, RestaurantModel item) {
         Picasso.with(context)
-                .load(item.getIcon())
+                .load(item.getImage())
                 .placeholder(R.drawable.not_available)
                 .error(R.drawable.not_available)
                 .into(holder.image);

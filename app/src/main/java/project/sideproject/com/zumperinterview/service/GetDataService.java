@@ -17,4 +17,6 @@ public interface GetDataService {
     //https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=33.790802,-118.135482&type=restaurant&radius=500&key=AIzaSyB-bpw0ollWA5AKpT11Y2CL2qPFs4kC_dk
 
     //https://maps.googleapis.com/maps/api/place/nearbysearch/?json/type=restaurant&rankby=distance&location=33.790802,-118.135482&key=AIzaSyB-bpw0ollWA5AKpT11Y2CL2qPFs4kC_dk
+
+    // https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference=&sensor=false&key=AIzaSyB-bpw0ollWA5AKpT11Y2CL2qPFs4kC_dk
 }
