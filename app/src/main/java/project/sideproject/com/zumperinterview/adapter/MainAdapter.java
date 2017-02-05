@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 import project.sideproject.com.zumperinterview.Fonts;
 import project.sideproject.com.zumperinterview.R;
 import project.sideproject.com.zumperinterview.model.RestaurantModel.RestaurantModel;
-import project.sideproject.com.zumperinterview.model.search.Places;
 
 /**
  * Created by Shishir on 2/4/2017.

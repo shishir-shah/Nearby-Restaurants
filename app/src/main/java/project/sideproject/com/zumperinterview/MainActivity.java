@@ -7,12 +7,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import project.sideproject.com.zumperinterview.adapter.MainAdapter;
+import project.sideproject.com.zumperinterview.model.search.Places;
+import project.sideproject.com.zumperinterview.service.GetDataService;
+import project.sideproject.com.zumperinterview.service.ServiceFactory;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.recycleList) RecyclerView recycleList;
@@ -38,9 +45,52 @@ public class MainActivity extends AppCompatActivity {
         if(checkFirstRun()){
             addKeys();
         }
+
+        setupToolBar();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        /*Create a recycler view for loading of nearby restaurants*/
+        createRecyclerView();
+
+        /*Create a custom adpater to set view for items in
+        * previously created recycler view*/
+        createAndSetCustomAdapter();
+
+        /*Make an API call to Google Places API using Restrofit library
+        * Once the result is obtained it is loaded into the list of items
+        * using RxJava asynchronously*/
+        makeAPICall();
+    }
+
+
     // Helper Methods
+
+    private void makeAPICall() {
+
+        String key = getSharedPreferences(API_KEYS,MODE_PRIVATE).getString(GOOGLE_PLACES_KEY,"No key found");
+
+        Call<Places> call = ServiceFactory
+                .createRetrofitService(GetDataService.class,GetDataService.endpoint)
+                .getNearbyRestaurants("33.790802,-118.135482",key);
+
+        call.enqueue(new Callback<Places>() {
+            @Override
+            public void onResponse(Call<Places> call, Response<Places> response) {
+                int statusCode = response.code();
+
+                Log.i("onResponse",statusCode+"");
+            }
+
+            @Override
+            public void onFailure(Call<Places> call, Throwable t) {
+                Log.e("onFailure",t.getMessage());
+            }
+        });
+    }
 
     private void setupToolBar(){
         setSupportActionBar(toolbar);
